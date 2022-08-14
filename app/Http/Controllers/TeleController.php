@@ -31,7 +31,8 @@ class TeleController extends Controller
             $button = ['1' => 'youtube 0','2' => 'youtube 5','3' => 'youtube 10','4' => 'youtube 15','5' => 'youtube 20','6' => 'youtube 25']; // This should be in DB something like ($buttons = DB::table('youtube_btns')->where(button, '!=', $upd_data)->get()->toArray())
             $inbox = DB::table($inboxess)->where('upd_from_id', $updfromid)->first(); 
             $message_num = $inbox->message_num;
-            if(DB::table($inboxess)->where('upd_from_id', $updfromid)->doesntExist()){  
+
+            if($_SESSION['upd_from_id'] )->where('upd_from_id', $updfromid)->doesntExist()){  
             
                 DB::table($inboxess)->insertOrIgnore(['upd_from_id' => $updfromid]);
             }
@@ -163,20 +164,16 @@ class TeleController extends Controller
 
         }
         switch($text){
-                case ($text === '/start'):
+                
 
-                        $update = Telegram::commandsHandler(true);
-                    
-                    break;
-
-                case (strpos($text, $youtube) !== false):
+                case (strpos($text, '/start') !== false):
                     if(str_word_count($text) > 1){
                         $word1 = str_replace(" ", "%20", $repl_1_word);
                         $url = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=".$word1."&type=video&key=".$_ENV['YOUTUBE_API_KEY']."&maxResults=25";
                     }elseif((strpos($text, $youtube) !== false) && (str_word_count($text) === 1)){
                          $keyboard = Keyboard::make()->inline()->row(Keyboard::inlineButton(['text' => iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F519)).' Back', 'callback_data' => "Menu"]));
                         $ans = "what we are searching?";
-                        $send = NewClass::sendMess($chat_id,$ans,$keyboard);
+                        $send = $this->sendMess($chat_id,$ans,$keyboard);
                     exit;
                     }
 
@@ -202,7 +199,7 @@ class TeleController extends Controller
                             $keyboard->row(
                                 Keyboard::inlineButton(['text' => iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F519)).' Back', 'callback_data' => "Menu"]));
                             $ans = 'Nothing...';
-                            $send = NewClass::sendMess($chat_id,$ans,$keyboard);
+                            $send = $this->sendMess($chat_id,$ans,$keyboard);
                             exit;
                         } 
 
@@ -223,7 +220,7 @@ class TeleController extends Controller
                             } 
                         }
                         $buttons = Arr::except($button, [array_shift($button)]);
-                        $keyboard = NewClass::addButton($buttons);
+                        $keyboard = $this->addButton($buttons);
                         $db_youtube = DB::table($youtube)->where('title','like','%'.$repl_1_word.'%')->orWhere('channelTitle','like','%'.$repl_1_word.'%')->skip(0)->take(5)->latest('publishedAt')->get();
 
                         foreach ($db_youtube as $yout) {
@@ -233,13 +230,13 @@ class TeleController extends Controller
                         $keyboard->row(
                                 Keyboard::inlineButton(['text' => iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F519)).' Back', 'callback_data' => "Menu"]));
                                 $ans = 'founded by title '.$repl_1_word;
-                                return NewClass::sendMess($chat_id,$ans,$keyboard);
+                                return $this->sendMess($chat_id,$ans,$keyboard);
                     break;
                          
         }
                               
     }
-}
+
 
     private function editMess($updfrid,$message_num,$ans,$keyboard){
         return Telegram::editMessageText([
