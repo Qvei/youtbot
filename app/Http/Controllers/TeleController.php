@@ -26,120 +26,120 @@ class TeleController extends Controller
 
         if(isset($dat['callback_query'])){
 
-        	$updates = $dat['callback_query'];
-            $updfromid = $updates['from']['id'];
-            $upd_data = $updates['data'];
-            $button = ['1' => 'youtube 0','2' => 'youtube 5','3' => 'youtube 10','4' => 'youtube 15','5' => 'youtube 20','6' => 'youtube 25']; // This should be in DB something like ($buttons = //DB::table('youtube_btns')->where(button, '!=', $upd_data)->get()->toArray())
-            $inbox = //DB::table($inboxess)->where('upd_from_id', $updfromid)->first(); 
-            $message_num = $inbox->message_num;
+//         	$updates = $dat['callback_query'];
+//             $updfromid = $updates['from']['id'];
+//             $upd_data = $updates['data'];
+//             $button = ['1' => 'youtube 0','2' => 'youtube 5','3' => 'youtube 10','4' => 'youtube 15','5' => 'youtube 20','6' => 'youtube 25']; // This should be in DB something like ($buttons = //DB::table('youtube_btns')->where(button, '!=', $upd_data)->get()->toArray())
+//             $inbox = '';//DB::table($inboxess)->where('upd_from_id', $updfromid)->first(); 
+//             $message_num = $inbox->message_num;
 
-            if($_SESSION['upd_from_id'] )->where('upd_from_id', $updfromid)->doesntExist()){  
+//             if($_SESSION['upd_from_id'] )->where('upd_from_id', $updfromid)->doesntExist()){  
             
-                //DB::table($inboxess)->insertOrIgnore(['upd_from_id' => $updfromid]);
-            }
+//                 //DB::table($inboxess)->insertOrIgnore(['upd_from_id' => $updfromid]);
+//             }
 
-            switch ($upd_data) {
-            case ($upd_data === 'xx')://DB::table($youtube)->where('videoId', $upd_data)->exists()):
-                $keyword = '';//DB::table($inboxess)->where('upd_from_id', $updfromid)->first();
-                $cutlastw = preg_replace('=\s\S+$=', "", $keyword->key1);
-                $keyboard = Keyboard::make()->inline();
-                if($cutlastw === $youtube){
-                    $yout = '';//DB::table($youtube)->where('videoId', $upd_data)->select('videoId','publishedAt','title')->latest('publishedAt')->get();
-                }else{
-                    $keyboard->row(Keyboard::inlineButton([
-                            'text'          => iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F519)).' back',
-                            'callback_data' => 'Menu']));
-                    $ans = "Ups, something went wrong!";
-                    $send = $this->editMess($updfromid,$message_num,$ans,$keyboard);
-                    exit;
+//             switch ($upd_data) {
+//             case ($upd_data === 'xx')://DB::table($youtube)->where('videoId', $upd_data)->exists()):
+//                 $keyword = '';//DB::table($inboxess)->where('upd_from_id', $updfromid)->first();
+//                 $cutlastw = preg_replace('=\s\S+$=', "", $keyword->key1);
+//                 $keyboard = Keyboard::make()->inline();
+//                 if($cutlastw === $youtube){
+//                     $yout = '';//DB::table($youtube)->where('videoId', $upd_data)->select('videoId','publishedAt','title')->latest('publishedAt')->get();
+//                 }else{
+//                     $keyboard->row(Keyboard::inlineButton([
+//                             'text'          => iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F519)).' back',
+//                             'callback_data' => 'Menu']));
+//                     $ans = "Ups, something went wrong!";
+//                     $send = $this->editMess($updfromid,$message_num,$ans,$keyboard);
+//                     exit;
 
-                }
-                foreach ($yout as $val) {
+//                 }
+//                 foreach ($yout as $val) {
                     
-                        $l = $val->publishedAt;
-                        $p = $val->videoId;
+//                         $l = $val->publishedAt;
+//                         $p = $val->videoId;
                     
-                }
+//                 }
                 
-                $keyboard->row(Keyboard::inlineButton([
-                            'text'          => iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F519)).' back',
-                            'callback_data' => $keyword->key1]));
-                $ans = "Published: ".Carbon::parse($l)->diffForHumans()."\n\nhttps://www.youtube.com/watch?v=".$p;
-                return $this->editMess($updfromid,$message_num,$ans,$keyboard);
+//                 $keyboard->row(Keyboard::inlineButton([
+//                             'text'          => iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F519)).' back',
+//                             'callback_data' => $keyword->key1]));
+//                 $ans = "Published: ".Carbon::parse($l)->diffForHumans()."\n\nhttps://www.youtube.com/watch?v=".$p;
+//                 return $this->editMess($updfromid,$message_num,$ans,$keyboard);
             
-//  Start Menu ---------------------------------------------------------------------------------------------------------------------
+// //  Start Menu ---------------------------------------------------------------------------------------------------------------------
 
-            case ($upd_data === "Menu"):
+//             case ($upd_data === "Menu"):
                 
-                $keyboard = Keyboard::make()->inline();
-                if($updfromid === $_ENV['YOUR_MESSAGE_ID']){
-                    $keyboard->row(Keyboard::inlineButton(['text' => iconv('UCS-4LE', 'UTF-8', pack('V', 0x2757)).' Delete youtube', 'callback_data' => "yout_dell"]));
-                }
-                $keyboard->row(Keyboard::inlineButton(['text' => iconv('UCS-4LE', 'UTF-8', pack('V', 0x2757)).' How to use', 'callback_data' => "info"]));
-                $ans = "<b>Menu</b>";
-                return $this->editMess($updfromid,$message_num,$ans,$keyboard);
+//                 $keyboard = Keyboard::make()->inline();
+//                 if($updfromid === $_ENV['YOUR_MESSAGE_ID']){
+//                     $keyboard->row(Keyboard::inlineButton(['text' => iconv('UCS-4LE', 'UTF-8', pack('V', 0x2757)).' Delete youtube', 'callback_data' => "yout_dell"]));
+//                 }
+//                 $keyboard->row(Keyboard::inlineButton(['text' => iconv('UCS-4LE', 'UTF-8', pack('V', 0x2757)).' How to use', 'callback_data' => "info"]));
+//                 $ans = "<b>Menu</b>";
+//                 return $this->editMess($updfromid,$message_num,$ans,$keyboard);
 
- //  Delete youtube table and info ------------------------------------------------------------------------------------------------
+//  //  Delete youtube table and info ------------------------------------------------------------------------------------------------
 
-        case ($upd_data === "yout_dell"||$upd_data === "info"):
-            if($upd_data === 'yout_dell'){
-                    $ans = 'Youtube table deleted';
-                    //DB::table($youtube)->truncate();
-            }else{
-                    $ans = "Just type: <b>Youtube madonna</b> or whatever you are looking for..\n\nTo reboot type: /start";
-            }
-                $keyboard = Keyboard::make()->inline()->row(Keyboard::inlineButton(['text' => 'Menu', 'callback_data' => 'Menu']));
-                return $this->editMess($updfromid,$message_num,$ans,$keyboard);
+//         case ($upd_data === "yout_dell"||$upd_data === "info"):
+//             if($upd_data === 'yout_dell'){
+//                     $ans = 'Youtube table deleted';
+//                     //DB::table($youtube)->truncate();
+//             }else{
+//                     $ans = "Just type: <b>Youtube madonna</b> or whatever you are looking for..\n\nTo reboot type: /start";
+//             }
+//                 $keyboard = Keyboard::make()->inline()->row(Keyboard::inlineButton(['text' => 'Menu', 'callback_data' => 'Menu']));
+//                 return $this->editMess($updfromid,$message_num,$ans,$keyboard);
 
-//  Get Next 5 Youtube videos from Database  --------------------------------------------------------------------------------------
+// //  Get Next 5 Youtube videos from Database  --------------------------------------------------------------------------------------
 
-         case (Arr::except($button, $upd_data) !== false):
-                $search_val = '';//DB::table($inboxess)->where('upd_from_id', $updfromid)->first();
-                //DB::table($inboxess)->where('upd_from_id', $updfromid)->update(['key1' => $upd_data]);
-                $last_word_start = strrpos($upd_data, " ") + 1;
-                $last_word = substr($upd_data, $last_word_start);
-                $cutlastw = preg_replace('=\s\S+$=', "", $upd_data);
-                $obr = intval($last_word);
-                $search = str_replace("%20", " ", $search_val->keyword);
-                $yout = '';//DB::table($cutlastw)->where('title','like','%'.$search.'%')->orWhere('channelTitle','like','%'.$search.'%')->skip($obr)->take(5)->latest('publishedAt')->get();
-                $ans = 'Found for your request '.$search;
-                $buttons = Arr::except($button, [$upd_data]);
-                $keyboard = $this->addButton($buttons);
+//          case (Arr::except($button, $upd_data) !== false):
+//                 $search_val = '';//DB::table($inboxess)->where('upd_from_id', $updfromid)->first();
+//                 //DB::table($inboxess)->where('upd_from_id', $updfromid)->update(['key1' => $upd_data]);
+//                 $last_word_start = strrpos($upd_data, " ") + 1;
+//                 $last_word = substr($upd_data, $last_word_start);
+//                 $cutlastw = preg_replace('=\s\S+$=', "", $upd_data);
+//                 $obr = intval($last_word);
+//                 $search = str_replace("%20", " ", $search_val->keyword);
+//                 $yout = '';//DB::table($cutlastw)->where('title','like','%'.$search.'%')->orWhere('channelTitle','like','%'.$search.'%')->skip($obr)->take(5)->latest('publishedAt')->get();
+//                 $ans = 'Found for your request '.$search;
+//                 $buttons = Arr::except($button, [$upd_data]);
+//                 $keyboard = $this->addButton($buttons);
                 
-                    foreach($yout as $val){
+//                     foreach($yout as $val){
                         
-                            $title = $val->title;
-                            $title = strval($title);
-                            $video_id = $val->videoId;
-                            $short_title = mb_substr($title, 0, 30);
-                            $keyboard->row(Keyboard::inlineButton([
-                                'text'          => $title,
-                                'callback_data' => $video_id]));
+//                             $title = $val->title;
+//                             $title = strval($title);
+//                             $video_id = $val->videoId;
+//                             $short_title = mb_substr($title, 0, 30);
+//                             $keyboard->row(Keyboard::inlineButton([
+//                                 'text'          => $title,
+//                                 'callback_data' => $video_id]));
 
                          
-                    }
+//                     }
                 
-                    $keyboard->row(
-                        Keyboard::inlineButton(['text' => iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F519)).' Back', 'callback_data' => 'Menu']));
-                        return $this->editMess($updfromid,$message_num,$ans,$keyboard);
+//                     $keyboard->row(
+//                         Keyboard::inlineButton(['text' => iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F519)).' Back', 'callback_data' => 'Menu']));
+//                         return $this->editMess($updfromid,$message_num,$ans,$keyboard);
 
-            case (strpos($upd_data, $youtube) !== false):
-                $keyword = '';//DB::table($inboxess)->where('upd_from_id', $updfromid)->first();
-                $key1 = str_replace("%20", " ", $keyword->key1);
-                $yout = '';//DB::table($youtube)->where('title','like','%'.$key1.'%')->orWhere('channelTitle','like','%'.$key1.'%')->skip(0)->take(5)->latest('publishedAt')->get();
-                $buttons = Arr::except($button, [array_shift($button)]);
-                $keyboard = $this->addButton($buttons);
-                        foreach ($yout as $val) {
-                            $chantit = $val->channelTitle;
-                            $title = mb_substr($val->title, 0, 30);
-                            $keyboard->row(Keyboard::inlineButton(['text' => $title, 'callback_data' => $val->videoId]));
-                        }
-                        $keyboard->row(
-                                Keyboard::inlineButton(['text' => iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F519)).' Back', 'callback_data' => "Menu"]));
-                                $ans = 'founded by title '.$key1;
-                                return $this->editMess($updfromid,$message_num,$ans,$keyboard);
+//             case (strpos($upd_data, $youtube) !== false):
+//                 $keyword = '';//DB::table($inboxess)->where('upd_from_id', $updfromid)->first();
+//                 $key1 = str_replace("%20", " ", $keyword->key1);
+//                 $yout = '';//DB::table($youtube)->where('title','like','%'.$key1.'%')->orWhere('channelTitle','like','%'.$key1.'%')->skip(0)->take(5)->latest('publishedAt')->get();
+//                 $buttons = Arr::except($button, [array_shift($button)]);
+//                 $keyboard = $this->addButton($buttons);
+//                         foreach ($yout as $val) {
+//                             $chantit = $val->channelTitle;
+//                             $title = mb_substr($val->title, 0, 30);
+//                             $keyboard->row(Keyboard::inlineButton(['text' => $title, 'callback_data' => $val->videoId]));
+//                         }
+//                         $keyboard->row(
+//                                 Keyboard::inlineButton(['text' => iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F519)).' Back', 'callback_data' => "Menu"]));
+//                                 $ans = 'founded by title '.$key1;
+//                                 return $this->editMess($updfromid,$message_num,$ans,$keyboard);
 
-        }  
+//         }  
     }elseif(isset($dat['message']['text'])){
 
         $chat_id    = $dat['message']['chat']['id'];
@@ -148,7 +148,7 @@ class TeleController extends Controller
         //$text = $this->userText($text);
         $repl_1_word = substr(strstr($text," "), 1);
         $repl_1_word = preg_replace("/[^а-яА-ЯёЁіІїЇєЄa-zA-Z0-9\s]/iu", '', $repl_1_word);
-        $next_message = $updates['message']['message_id'];
+        //$next_message = $updates['message']['message_id'];
         //DB::table($inboxess)->update(['message_num' => $next_message+1]);
         $button = ['1' => 'youtube 0','2' => 'youtube 5','3' => 'youtube 10','4' => 'youtube 15','5' => 'youtube 20','6' => 'youtube 25'];  // This should be in DB something like ($buttons = //DB::table('youtube_btns')->where(button, '!=', $upd_data)->get()->toArray())
         // if(//DB::table($inboxess)->where('upd_from_id', $updfromid)->doesntExist()){  
