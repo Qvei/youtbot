@@ -168,6 +168,10 @@ class TeleController extends Controller
                 
 
                 case (strpos($text, '/start') !== false):
+                $ans = "what we are searching?";
+                $keyboard = Keyboard::make()->inline()->row(Keyboard::inlineButton(['text' => iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F519)).' Back', 'callback_data' => "Menu"]));
+                $send = $this->sendMess($chat_id,$ans,$keyboard);
+                exit;
                     if(str_word_count($text) > 1){
                         $word1 = str_replace(" ", "%20", $repl_1_word);
                         $url = "https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=".$word1."&type=video&key=".$_ENV['YOUTUBE_API_KEY']."&maxResults=25";
