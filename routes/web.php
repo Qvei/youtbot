@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,8 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', function (Request $request) {
+	$value = $request->session()->get('key');
+	dd($value);
+    return view('welcome', compact('value'));
 });
 
 Route::post('/telegramsecret', [\App\Http\Controllers\TeleController::class, 'get_data_from_tg']);
