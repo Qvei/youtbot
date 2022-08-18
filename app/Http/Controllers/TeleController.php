@@ -25,25 +25,26 @@ class TeleController extends Controller
         $youtube = 'youtube';
 
         if(isset($dat['callback_query'])){
+
         	$updates = $dat['callback_query'];
             $updfromid = $updates['from']['id'];
             $upd_data = $updates['data'];
-            $button = ['1' => 'youtube 0','2' => 'youtube 5','3' => 'youtube 10','4' => 'youtube 15','5' => 'youtube 20','6' => 'youtube 25']; // This should be in DB something like ($buttons = DB::table('youtube_btns')->where(button, '!=', $upd_data)->get()->toArray())
-            $inbox = DB::table($inboxess)->where('upd_from_id', $updfromid)->first(); 
+            $button = ['1' => 'youtube 0','2' => 'youtube 5','3' => 'youtube 10','4' => 'youtube 15','5' => 'youtube 20','6' => 'youtube 25']; // This should be in DB something like ($buttons = //DB::table('youtube_btns')->where(button, '!=', $upd_data)->get()->toArray())
+            $inbox = //DB::table($inboxess)->where('upd_from_id', $updfromid)->first(); 
             $message_num = $inbox->message_num;
 
             if($_SESSION['upd_from_id'] )->where('upd_from_id', $updfromid)->doesntExist()){  
             
-                DB::table($inboxess)->insertOrIgnore(['upd_from_id' => $updfromid]);
+                //DB::table($inboxess)->insertOrIgnore(['upd_from_id' => $updfromid]);
             }
 
             switch ($upd_data) {
-            case (DB::table($youtube)->where('videoId', $upd_data)->exists()):
-                $keyword = DB::table($inboxess)->where('upd_from_id', $updfromid)->first();
+            case ($upd_data === 'xx')://DB::table($youtube)->where('videoId', $upd_data)->exists()):
+                $keyword = '';//DB::table($inboxess)->where('upd_from_id', $updfromid)->first();
                 $cutlastw = preg_replace('=\s\S+$=', "", $keyword->key1);
                 $keyboard = Keyboard::make()->inline();
                 if($cutlastw === $youtube){
-                    $yout = DB::table($youtube)->where('videoId', $upd_data)->select('videoId','publishedAt','title')->latest('publishedAt')->get();
+                    $yout = '';//DB::table($youtube)->where('videoId', $upd_data)->select('videoId','publishedAt','title')->latest('publishedAt')->get();
                 }else{
                     $keyboard->row(Keyboard::inlineButton([
                             'text'          => iconv('UCS-4LE', 'UTF-8', pack('V', 0x1F519)).' back',
@@ -83,7 +84,7 @@ class TeleController extends Controller
         case ($upd_data === "yout_dell"||$upd_data === "info"):
             if($upd_data === 'yout_dell'){
                     $ans = 'Youtube table deleted';
-                    DB::table($youtube)->truncate();
+                    //DB::table($youtube)->truncate();
             }else{
                     $ans = "Just type: <b>Youtube madonna</b> or whatever you are looking for..\n\nTo reboot type: /start";
             }
@@ -93,14 +94,14 @@ class TeleController extends Controller
 //  Get Next 5 Youtube videos from Database  --------------------------------------------------------------------------------------
 
          case (Arr::except($button, $upd_data) !== false):
-                $search_val = DB::table($inboxess)->where('upd_from_id', $updfromid)->first();
-                DB::table($inboxess)->where('upd_from_id', $updfromid)->update(['key1' => $upd_data]);
+                $search_val = '';//DB::table($inboxess)->where('upd_from_id', $updfromid)->first();
+                //DB::table($inboxess)->where('upd_from_id', $updfromid)->update(['key1' => $upd_data]);
                 $last_word_start = strrpos($upd_data, " ") + 1;
                 $last_word = substr($upd_data, $last_word_start);
                 $cutlastw = preg_replace('=\s\S+$=', "", $upd_data);
                 $obr = intval($last_word);
                 $search = str_replace("%20", " ", $search_val->keyword);
-                $yout = DB::table($cutlastw)->where('title','like','%'.$search.'%')->orWhere('channelTitle','like','%'.$search.'%')->skip($obr)->take(5)->latest('publishedAt')->get();
+                $yout = '';//DB::table($cutlastw)->where('title','like','%'.$search.'%')->orWhere('channelTitle','like','%'.$search.'%')->skip($obr)->take(5)->latest('publishedAt')->get();
                 $ans = 'Found for your request '.$search;
                 $buttons = Arr::except($button, [$upd_data]);
                 $keyboard = $this->addButton($buttons);
@@ -123,9 +124,9 @@ class TeleController extends Controller
                         return $this->editMess($updfromid,$message_num,$ans,$keyboard);
 
             case (strpos($upd_data, $youtube) !== false):
-                $keyword = DB::table($inboxess)->where('upd_from_id', $updfromid)->first();
+                $keyword = '';//DB::table($inboxess)->where('upd_from_id', $updfromid)->first();
                 $key1 = str_replace("%20", " ", $keyword->key1);
-                $yout = DB::table($youtube)->where('title','like','%'.$key1.'%')->orWhere('channelTitle','like','%'.$key1.'%')->skip(0)->take(5)->latest('publishedAt')->get();
+                $yout = '';//DB::table($youtube)->where('title','like','%'.$key1.'%')->orWhere('channelTitle','like','%'.$key1.'%')->skip(0)->take(5)->latest('publishedAt')->get();
                 $buttons = Arr::except($button, [array_shift($button)]);
                 $keyboard = $this->addButton($buttons);
                         foreach ($yout as $val) {
@@ -148,12 +149,12 @@ class TeleController extends Controller
         $repl_1_word = substr(strstr($text," "), 1);
         $repl_1_word = preg_replace("/[^а-яА-ЯёЁіІїЇєЄa-zA-Z0-9\s]/iu", '', $repl_1_word);
         $next_message = $updates['message']['message_id'];
-        DB::table($inboxess)->update(['message_num' => $next_message+1]);
-        $button = ['1' => 'youtube 0','2' => 'youtube 5','3' => 'youtube 10','4' => 'youtube 15','5' => 'youtube 20','6' => 'youtube 25'];  // This should be in DB something like ($buttons = DB::table('youtube_btns')->where(button, '!=', $upd_data)->get()->toArray())
-        if(DB::table($inboxess)->where('upd_from_id', $updfromid)->doesntExist()){  
+        //DB::table($inboxess)->update(['message_num' => $next_message+1]);
+        $button = ['1' => 'youtube 0','2' => 'youtube 5','3' => 'youtube 10','4' => 'youtube 15','5' => 'youtube 20','6' => 'youtube 25'];  // This should be in DB something like ($buttons = //DB::table('youtube_btns')->where(button, '!=', $upd_data)->get()->toArray())
+        // if(//DB::table($inboxess)->where('upd_from_id', $updfromid)->doesntExist()){  
         
-            DB::table($inboxess)->insertOrIgnore(['upd_from_id' => $updfromid]);
-        }
+        //     //DB::table($inboxess)->insertOrIgnore(['upd_from_id' => $updfromid]);
+        // }
 //  ---------------------------------------------------------------------------------------------------------------------------------
         if($text === ''||$text === ' '){
 
@@ -177,8 +178,7 @@ class TeleController extends Controller
                     exit;
                     }
 
-                    DB::table($inboxess)->where('upd_from_id', $updfromid)->update(['keyword' => $word1,
-                                                                                    'key1' => 'youtube 0']);
+                    //DB::table($inboxess)->where('upd_from_id', $updfromid)->update(['keyword' => $word1, 'key1' => 'youtube 0']);
                         $curl = curl_init();
                         curl_setopt_array($curl, array(
                             CURLOPT_URL => $url,
@@ -211,17 +211,17 @@ class TeleController extends Controller
                             $shrt_title = preg_replace("/[^а-яА-ЯёЁіІїЇєЄa-zA-Z0-9\s]/iu", "", $title);
                             $shrt_title = preg_replace('/^([ ]+)|([ ]){2,}/m', '$2', $shrt_title);
                             $shrt_title = mb_substr($shrt_title, 0, 30);
-                            if(DB::table($youtube)->where('videoId',$item['id']['videoId'])->doesntExist()){
-                                DB::table($youtube)->insertOrIgnore(['title' => $title,
-                                                                  'channelTitle' => $chanel_title,
-                                                                  'videoId' => $item['id']['videoId'],
-                                                                  'channelId' => $item['snippet']['channelId'],
-                                                                  'publishedAt' => $item['snippet']['publishedAt']]);
-                            } 
+                            // if(//DB::table($youtube)->where('videoId',$item['id']['videoId'])->doesntExist()){
+                            //     //DB::table($youtube)->insertOrIgnore(['title' => $title,
+                            //                                       'channelTitle' => $chanel_title,
+                            //                                       'videoId' => $item['id']['videoId'],
+                            //                                       'channelId' => $item['snippet']['channelId'],
+                            //                                       'publishedAt' => $item['snippet']['publishedAt']]);
+                            // } 
                         }
                         $buttons = Arr::except($button, [array_shift($button)]);
                         $keyboard = $this->addButton($buttons);
-                        $db_youtube = DB::table($youtube)->where('title','like','%'.$repl_1_word.'%')->orWhere('channelTitle','like','%'.$repl_1_word.'%')->skip(0)->take(5)->latest('publishedAt')->get();
+                        $db_youtube = '';//DB::table($youtube)->where('title','like','%'.$repl_1_word.'%')->orWhere('channelTitle','like','%'.$repl_1_word.'%')->skip(0)->take(5)->latest('publishedAt')->get();
 
                         foreach ($db_youtube as $yout) {
                             $keyboard->row(Keyboard::inlineButton(['text' => $yout->title, 'callback_data' => $yout->videoId]));

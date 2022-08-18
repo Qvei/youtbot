@@ -16,9 +16,9 @@ use Session;
 */
 
 Route::get('/', function (Request $request) {
-	$value = $request->session()->get('key');
-	dd($value);
-    return view('welcome', compact('value'));
+	// $value = $request->session()->all();
+	// dd($value);
+    return view('welcome');
 });
 
-Route::post('/telegramsecret', [\App\Http\Controllers\TeleController::class, 'get_data_from_tg']);
+Route::post('/telegramsecret', [\App\Http\Controllers\TeleController::class, 'get_data_from_tg'])->middleware('telegramsession');
