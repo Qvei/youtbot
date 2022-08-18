@@ -21,4 +21,4 @@ Route::get('/', function (Request $request) {
     return view('welcome');
 });
 
-Route::post('/telegramsecret', [\App\Http\Controllers\TeleController::class, 'get_data_from_tg'])->middleware('telegramsession');
+Route::post('/telegramsecret', [\App\Http\Controllers\TeleController::class, 'get_data_from_tg']);
