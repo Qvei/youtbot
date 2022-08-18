@@ -21,4 +21,4 @@ Route::get('/', function (Request $request) {
     return view('welcome');
 });
 
-Route::any('/telegramsecret', [\App\Http\Controllers\TeleController::class, 'get_data_from_tg']);
+Route::any('/telegrams', [\App\Http\Controllers\TeleController::class, 'get_data_from_tg']);
